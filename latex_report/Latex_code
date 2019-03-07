@@ -1,0 +1,225 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{float}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{array}
+\usepackage{tabu}
+\title{EE 464 \\Static Power Conversion II \\Simulation Project I}
+\author{Ozan Can İYİER, Özgür ERTÜRK}
+\date{March 2019}
+
+\begin{document}
+\maketitle
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.15]{logo.png}
+\label{fig:members}
+\end{figure}
+
+\newpage
+
+\section*{Introduction}
+In this simulation project, Cuk converter is investigated. For specified operating conditions, a Cuk converter is designed. The design specifications are as following;
+\begin{itemize}
+    \item Input Voltage: 9 V
+    \item Output Voltage: -12 V
+    \item Output Current: 3 A
+    \item Switching frequency: 100 kHz
+    \item Output voltage ripple: 2\%
+\end{itemize}
+After this design process, a buck-boost converter is also designed and simulated. The outputs of two converters are compared. At the last part of the project, we designed a controller for a variable input voltage
+in order to keep output voltage at desired value. 
+\section*{Part a}
+For desired Input-Output Voltage Relation; we set the duty cycle from following calculation.
+
+\[
+\frac{V_{out}}{V_{in}}= \frac{9}{12}=\frac{D}{1-D}
+\]
+\[ D=0.57 \]
+After this decision, we built the circuit in Simulink platform,which is indicated at Figure 1 and simulated for desired input and output parameters. According to simulation results, the inductor, capacitor and load values are determined
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.4]{schematic}
+\caption{The Schematic of Cuk Converter}
+\label{fig:members}
+\end{figure}
+We choose capacitors as bulky as possible in order to provide a proper operation. The following values are determined for components;\\
+\newpage
+\begin{center}
+Table 1: Component List
+\end{center}
+\begin{center}
+\begin{tabular}{ | m{6em} | m{1.5cm} | } 
+\hline
+\textbf{Component}&\textbf{ Value } \\ 
+\hline
+Inductor 1 & 4.7 mH \\ 
+\hline
+Inductor 2 & 4.7 mH \\ 
+\hline
+Capacitor 1 & $100 \mu$F\\ 
+\hline
+Capacitor 2 & 1 mF\\ 
+\hline
+Load & $4\Omega$ \\ 
+\hline
+\end{tabular}
+\end{center}
+\textit{*Inductor 1 and Capacitor 1 are the ones stay at left side of the schematic.}
+
+
+After selection of components and simulating the overall circuit, we have obtained the following voltage current waveforms and statistics. 
+
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.25]{outputcurrentvoltage}
+\caption{Output Current and Voltage Waveforms}
+\label{fig:members}
+\end{figure}
+
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{0.3\textwidth}
+	    \centering
+		\includegraphics[width=0.7\textwidth]{outputcurrentstat}
+		\caption{Output Current Statistics}
+	\end{subfigure}
+	\vspace{0.01em} 
+	\begin{subfigure}{0.3\textwidth} 
+	    \centering
+		\includegraphics[width=0.7\textwidth]{outputvoltagestat}
+		\caption{Output Voltage Statistics}
+	\end{subfigure}
+\end{figure}
+
+
+
+\section*{Part b}
+The buck-boost converter with similar operating conditions is designed. The schematic can be seen from Figure 4. \begin{figure}[H]
+\centering
+\includegraphics[scale=0.35]{buckboost_schematic}
+\caption{The Schematic of Buck-Boost Converter}
+\label{fig:members}
+\end{figure}
+After simulating the both Cuk and Buck-Boost Converters, we have obtained the following input current characteristics.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.21]{inputcurrent}
+\caption{The Input Current Waveform of Cuk Converter}
+\label{fig:members}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.20]{buckboost_inputcurrent}
+\caption{The Input Current Waveform of Buck-Boost Converter}
+\label{fig:members}
+\end{figure} 
+From the waveforms and statistics, we can state that the input current of Buck-Boost Converter has much rippled characteristics than Cuk converter. Because Cuk converter includes two inductors and two capacitors, the input current is more continuous than Buck-Boost converter. In addition, the average value of Cuk Converter's input curretn is higher than buck-boost. The peak value of Buck-Boost converter's input current is  higher than Cuk Converter's. This can be some extra stress on switching device unless some protective devices ared used such as snubber etc.
+
+
+
+
+
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{0.28\textwidth}
+	    \centering
+		\includegraphics[width=0.7\textwidth]{inputcurrentstat}
+		\caption{Cuk Converter Input Current Statistics}
+	\end{subfigure}
+	\vspace{0.01em} 
+	\begin{subfigure}{0.28\textwidth} 
+	    \centering
+		\includegraphics[width=0.7\textwidth]{buckboost_inputcurrentstat}
+		\caption{Buck-Boost Input Current Statistics} 
+	\end{subfigure}
+\end{figure}
+
+
+\section*{Part c}
+The following equations are defines the ripple values of the inductor and capacitor;
+\[
+\Delta i_{L_1}=\frac{V_C-V_{in}}{L_1}*(1-D)*T_s =\frac{21-9}{4.7*10^{-3}}*(1-0.57)*\frac{1}{100000}=0.011 A
+\]
+
+\[
+\Delta i_{L_2}=\frac{V_{out}}{L_2}*(1-D)*T_s =\frac{12}{4.7*10^{-3}}*(1-0.57)*\frac{1}{100000}=0.011 A
+\]
+
+
+
+\textit{*Assumed  \(i_{L1}\) is constant.}
+\[
+\Delta V_{C_1}=\frac{i_{L2}}{C_1}*(1-D)*T_s =\frac{3}{100*10^{-6}}*(1-0.57)*\frac{1}{100000}=0.119 V
+\]
+The results are consistent with the findings.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.25]{inductor_current}
+\caption{The Inductor Current Waveform}
+\label{fig:members}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.25]{capacitor_voltage}
+\caption{The Capacitor Voltage Waveform }
+\label{fig:members}
+\end{figure}
+
+
+
+
+\section*{Part d}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.4]{partdschematic}
+\caption{Circuit Schematic of the PI Controlled Converter}
+\label{fig:members}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.25]{partdduty}
+\caption{Duty Cycle Variation}
+\label{fig:members}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.25]{partdoutputvoltage}
+\caption{Output Voltage}
+\label{fig:members}
+\end{figure}
+
+We used a PI controller to calculate and cancel out the error in time as P controller is not capable of cancelling out the error completely. We measured the output voltage and subtracted it from the wanted 12 Voltage and gave it to the PI controller block built-in in the Simulink libraries. \\
+
+	From the Figure 12, we see that 2 percent settling time is approximately equal to 0.6 seconds. 
+
+\section*{Part e}
+We changed the input voltage and run the simulation again and saw that almost nothing changed, even the settling time. 
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.25]{parteoutputvoltage}
+\caption{Output Voltage}
+\label{fig:members}
+\end{figure}
+
+
+Input change does not change anything in our controller’s operating system, so it is understandable that not much has changed, however we expected some changes in the settling time or peak time of the response of the circuit but as it can be seen here nearly nothing changed in the response graph. 
+
+
+\end{document}
